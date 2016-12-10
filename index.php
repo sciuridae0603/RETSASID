@@ -11,10 +11,17 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
+    <nav class="navbar navbar-light bg-faded">
+      <a class="navbar-brand" href="index.php">三鐵機場最新消息整合系統</a>
+    </nav>
+
+    <section id="railway">
+      
+    </section>
 
     <!-- 在 Body 關閉前載入 JS -->
     <!-- jQuery -->
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <!-- Bootstrap 的 JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> 
     <!-- Vue.js -->
