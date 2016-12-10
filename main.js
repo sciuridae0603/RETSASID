@@ -1,6 +1,15 @@
 //(function() {
   "use strict";
 
+  //------ Loading Firebase
+  var firebaseConfig = {
+    apiKey: "AIzaSyApiBCODvfZljh4PitNIYShm34CL3xUSWU",
+    authDomain: "retsasid-bcd47.firebaseapp.com",
+    databaseURL: "https://retsasid-bcd47.firebaseio.com",
+    storageBucket: "retsasid-bcd47.appspot.com",
+    messagingSenderId: "134020889043"
+  };
+  firebase.initializeApp(firebaseConfig);
 
   //------ 公告
   var railway = new Vue({    //Railway
@@ -179,19 +188,19 @@
       },
       getCountyName: function (log, lat) {
         $.getJSON(`https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.nlsc.gov.tw%2Fother%2FTownVillagePointQuery%2F${log.toFixed(4)}%2F${lat.toFixed(2)}'&format=json&callback=`, (data) => {
-          this.countyName = data.query.results.townVillageItem.ctyName;
+          this.gps.countyName = data.query.results.townVillageItem.ctyName;
         });
       },
       locateUserLocation: function () {
         navigator.geolocation.getCurrentPosition((position) => {
-          this.log = position.coords.longitude;
-          this.lat = position.coords.latitude;
+          this.gps.log = position.coords.longitude;
+          this.gps.lat = position.coords.latitude;
           this.getCountyName(position.coords.longitude, position.coords.latitude);
         }, () => {});
       }
     }
   });
   weather.getData();
-  console.log(gps.locateUserLocation());
+  weather.locateUserLocation();
 //})();
 
