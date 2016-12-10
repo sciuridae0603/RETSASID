@@ -148,5 +148,50 @@
     }
   });
   phone.getData();
+
+  //天氣
+  var weather = new Vue({
+    el: '#weather',
+    data: {
+      districts: [],
+      gps: {
+        log: 0,
+        lat: 0,
+        countyName: ''
+      }
+    },
+    methods: {
+      getData: function () {
+        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%27http%3A%2F%2Fwww.cwb.gov.tw%2FV7%2Fforecast%2Ff_index.htm%27%20%20and%20xpath%3D%27%2F%2F*%5B%40class%3D%22big01%22%20or%20%40class%3D%22big03%22%20or%20%40class%3D%22big04%22%5D%2F*%2Ftable%2Ftbody%2Ftr%27&format=json&diagnostics=false&callback=", (data) => {
+          for (let i in data.query.results.tr) {
+            let tr = data.query.results.tr[i];
+            if (typeof tr.id === "undefined") continue;
+            console.log(tr);
+            this.districts.push({
+              id: tr.id.replace('List', ''),
+              name: tr.td[0].a.content,
+              temperature: tr.td[1].a.content,
+              rain: tr.td[2].a.content,
+              icon: tr.td[3].div.a.img.src
+            });
+          }
+        });
+      },
+      getCountyName: function (log, lat) {
+        $.getJSON(`https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.nlsc.gov.tw%2Fother%2FTownVillagePointQuery%2F${log.toFixed(4)}%2F${lat.toFixed(2)}'&format=json&callback=`, (data) => {
+          this.countyName = data.query.results.townVillageItem.ctyName;
+        });
+      },
+      locateUserLocation: function () {
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.log = position.coords.longitude;
+          this.lat = position.coords.latitude;
+          this.getCountyName(position.coords.longitude, position.coords.latitude);
+        }, () => {});
+      }
+    }
+  });
+  weather.getData();
+  console.log(gps.locateUserLocation());
 //})();
 
