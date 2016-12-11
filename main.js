@@ -10,6 +10,84 @@
     messagingSenderId: "134020889043"
   };
   firebase.initializeApp(firebaseConfig);
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  var user = new Vue({
+    el: '#user',
+    data: {
+      token: '',
+      user: '',
+      email: '',
+      photoUrl: '',
+      uid: 0,
+      modal: {
+        title: '',
+        body: ''
+      }
+    },
+    methods: {
+      login: function () {
+        firebase.auth().signInWithPopup(provider).then((result) => {
+          this.token = result.credential.accessToken;
+          let user = result.user;
+          this.user = user.displayName;
+          this.email = user.email;
+          this.photoUrl = user.photoURL;
+          this.uid = user.uid;
+        }).catch(function(error) {
+          console.log(error);
+          //@TODO: fix me
+        });
+      },
+      showReportModal: function (title, body) {
+        $('#input-modal').modal('show');
+      },
+      report: function (title, body) {
+        let newPost = firebase.database().ref(`/user-posts/${this.uid}`).push();
+        newPost.set({
+          title: this.modal.title,
+          body: this.modal.body
+        });
+      }
+    }
+  });
+
+  var report = new Vue({
+    el: '#report',
+    data: {
+      posts: {},
+      modal: {
+        title: '',
+        body: ''
+      }
+    },
+    methods: {
+      initPosts: function () {
+        var postsRecentRef = firebase.database().ref('/posts').limitToLast(20);
+        postsRecentRef.on('child_added', (data) => {
+          this.posts[data.key] = data.val();
+        });
+        postsRecentRef.on('child_changed', (data) => {
+          this.posts[data.key] = data.val();
+        });
+        postsRecentRef.on('child_removed', (data) => {
+          delete this.posts[data.key];
+        });
+      },
+      loadPosts: function () {
+        firebase.database().ref('/posts').orderByKey().once('value').then((snapshot) => {
+          this.posts = snapshot.val();
+        });
+      },
+      show: function (key) {
+        this.modal.title = this.posts[key].title;
+        this.modal.body = this.posts[key].body;
+        $('#report-modal').modal('show');
+      }
+    }
+  });
+  report.initPosts();
+  report.loadPosts();
 
   //------ 各站公告
   var railway = new Vue({    //Railway

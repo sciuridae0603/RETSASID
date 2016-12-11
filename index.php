@@ -99,8 +99,8 @@
             <div id="weather">
                 <div v-if="gps.countyName">
                     <div id="weather-icon" class="col-md-4 text-right">
-                        <h1></h1>
-                        <img v-bind:src="districts[gps.countyName].icon" class="img-thumbnail"></img>
+                        <p class="h1"></p>
+                        <img v-bind:src="districts[gps.countyName].icon" class="img-thumbnail">
                     </div> <!-- /#weather-icon -->
                     <div id="weather-text" class="col-md-8">
                         <p class="h3">{{ gps.countyName }}</p>
@@ -112,7 +112,7 @@
                 </div> <!-- /if -->
                 <div v-else>
                     <div id="weather-loading" class="col-md-12">
-                        <h3>正在載入天氣資料……</h3>
+                        <p class="h3">正在載入天氣資料……</p>
                         <p class="h1"> </p>
                     </div> <!-- /#weather-loading -->
                 </div> <!-- /else -->
@@ -121,14 +121,74 @@
             <hr>
 
             <div id="user">
-                 
+                 <div v-if="uid">
+                     <div class="col-md-4 text-right">
+                         <h1></h1>
+                         <img v-bind:src="photoUrl" class="img-thumbnail">
+                     </div>
+                     <div class="col-md-8">
+                         <p class="h3">{{ user }}</p>
+                         <button type="button" class="btn btn-block btn-success" v-on:click="showReportModal">回報</button>
+                     </div>
+                 </div>
+                 <div v-else>
+                     <button type="button" class="btn btn-block btn-primary" v-on:click="login">登入</button>
+                 </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="input-modal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">新回報</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="title" class="form-control" placeholder="標題" v-model="modal.title">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="內容" rows="20" v-model="modal.body"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" v-on:click="report">送出</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
             </div> <!-- /#user -->
         </div> <!-- /#sidebar -->
 
         <div id="report">
             <div class="col-md-12">
                 <h2>網友回報</h2>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr v-for="(post, key) in posts">
+                            <td><a href="#" v-on:click="show(key)">{{ post.title }}</a></td>
+                            <td>{{ post.author }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="report-modal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">{{ modal.title }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ modal.body }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div> <!-- /#report -->
     </section> <!-- /#wrap -->
 
@@ -140,8 +200,8 @@
             </div>
             <div class="col-sm-12">
                 <ul class="list-inline">
-                    <li><a href="#">About Us</a> |</li>
-                    <li><a href="https://github.com/">Source Code</a></li>
+                    <li><a href="about.html">About Us</a> |</li>
+                    <li><a href="https://github.com/sciuridae0603/RETSASID">Source Code</a></li>
                 </ul>
             </div>
         </div>
@@ -156,6 +216,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.3/vue.min.js"></script>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
+    <!-- Firebase Google API Provider -->
+    <script src="https://apis.google.com/js/platform.js" defer></script>
 
     <!-- main.js -->
     <script src="main.js"></script>
