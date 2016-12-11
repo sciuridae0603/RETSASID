@@ -188,7 +188,7 @@
     },
     methods: {
       getData: function () {
-        $.getJSON("/json/phone.json", (data) => {
+        $.getJSON("./json/phone.json", (data) => {
           for (let i in data.data) {
             this.numbers.push(data.data[i]);
           }
