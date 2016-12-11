@@ -11,7 +11,7 @@
   };
   firebase.initializeApp(firebaseConfig);
 
-  //------ 公告
+  //------ 各站公告
   var railway = new Vue({    //Railway
     el: '#railway',
     data: {
@@ -19,13 +19,12 @@
     },
     methods: {
       getAnnouncements: function () {
-        $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20%0Awhere%20url%3D%27http%3A%2F%2Fwww.railway.gov.tw%2Ftw%2Fnews.aspx%3Fn%3D6807%27%0Aand%20xpath%3D%27%2F%2F*[%40id%3D%22DG%22]%2Ftbody%2Ftr%27%20&format=json&diagnostics=false&callback=', (data) => {
+        $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20%0Awhere%20url%3D%27http%3A%2F%2Fwww.railway.gov.tw%2Ftw%2Fnews.aspx%3Fn%3D6807%27%0Aand%20xpath%3D%27%2F%2F*[%40id%3D%22DG%22]%2Ftbody%2Ftr%27%20limit%2010%20offset%202&format=json&diagnostics=false&callback=', (data) => {
           for (let i in data.query.results.tr) {
-            if(i == 0) continue;
             let td = data.query.results.tr[i].td;
             this.announcements.push({
               title: td[1].a.span.title,
-              url: td[1].a.href,
+              url: "http://www.railway.gov.tw/tw/" + td[1].a.href,
               date: td[3].content
             });
 
@@ -43,12 +42,12 @@
     },
     methods: {
       getAnnouncements: function () {
-        $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20%0Awhere%20url%3D%27https%3A%2F%2Fwww.thsrc.com.tw%2Ftw%2FNews%2FIndex%27%0Aand%20xpath%3D%27%2F%2F*%5B%40id%3D%22printcontent%22%5D%2Fsection%2Fsection%5B2%5D%2Ful%2Fli%27%20&format=json&diagnostics=false&callback=', (data) => {
+        $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20%0Awhere%20url%3D%27https%3A%2F%2Fwww.thsrc.com.tw%2Ftw%2FNews%2FIndex%27%0Aand%20xpath%3D%27%2F%2F*%5B%40id%3D%22printcontent%22%5D%2Fsection%2Fsection%5B2%5D%2Ful%2Fli%27%20limit%2010&format=json&diagnostics=false&callback=', (data) => {
           for (let i in data.query.results.li) {
             let a = data.query.results.li[i].a;
             this.announcements.push({
               title: a.title,
-              url: a.href,
+              url: "https://www.thsrc.com.tw" + a.href,
               date: a.strong
             });
           }
@@ -65,13 +64,12 @@
     },
     methods: {
       getAnnouncements: function () {
-        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D'http%3A%2F%2Fwww.taoyuan-airport.com%2Fchinese%2FNews%2F91a31292-f767-434d-944b-5623423ed3a0'%20and%20xpath%3D'%2F%2F*%5B%40id%3D%22news%22%5D%2Ftr'%20limit%2013&format=json&diagnostics=true&callback=", (data) => {
+        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D'http%3A%2F%2Fwww.taoyuan-airport.com%2Fchinese%2FNews%2F91a31292-f767-434d-944b-5623423ed3a0'%20and%20xpath%3D'%2F%2F*%5B%40id%3D%22news%22%5D%2Ftr'%20limit%2010%20offset%201&format=json&diagnostics=true&callback=", (data) => {
           for (let i in data.query.results.tr) {
-            if(i == 0) continue;
             let td = data.query.results.tr[i].td;
             this.announcements.push({
               title: td[1].span.a.content,
-              url: "http://www.taoyuan-airport.com" + td[1].span.a.url,
+              url: "http://www.taoyuan-airport.com" + td[1].span.a.href,
               date: td[2].span.content
             });
           }
@@ -89,7 +87,7 @@
     },
     methods: {
       getAnnouncements: function () {
-        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20%0Awhere%20url%3D%27http%3A%2F%2Fwww.tsa.gov.tw%2Ftsa%2Fzh%2Fnews.aspx%3Fkindid%3D11082%27%0Aand%20xpath%3D%27%2F%2F*%5B%40id%3D%22arrival_flights%22%5D%2Fdiv%2Fdiv%5B1%5D%2Ftable%2Ftbody%2Ftr%27%20&format=json&diagnostics=false&callback=", (data) => {
+        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20%0Awhere%20url%3D%27http%3A%2F%2Fwww.tsa.gov.tw%2Ftsa%2Fzh%2Fnews.aspx%3Fkindid%3D11082%27%0Aand%20xpath%3D%27%2F%2F*%5B%40id%3D%22arrival_flights%22%5D%2Fdiv%2Fdiv%5B1%5D%2Ftable%2Ftbody%2Ftr%27%20limit%2010&format=json&diagnostics=false&callback=", (data) => {
           for (let i in data.query.results.tr) {
             let td = data.query.results.tr[i].td;
             this.announcements.push({
@@ -103,42 +101,6 @@
     }
   });
   ssap.getAnnouncements();
-
-  var uv = new Vue({
-    el: '#uv',
-    data: {
-      uv: []
-    },
-    methods: {
-      getData: function () {
-        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D'http%3A%2F%2Fopendata.epa.gov.tw%2Fws%2FData%2FUV%2F%3Fformat%3Djson'&format=json&callback=", (data) => {
-          let uvData = JSON.parse(data.query.results.body);
-          for (let i in uvData) {
-            this.uv.push(uvData[i]);
-          }
-        });
-      }
-    }
-  });
-  uv.getData();
-
-  var airq = new Vue({
-    el: '#airq',
-    data: {
-      airq: []
-    },
-    methods: {
-      getData: function () {
-        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D'http%3A%2F%2Fopendata2.epa.gov.tw%2FAQX.json'&format=json&callback=", (data) => {
-          let airqData = JSON.parse(data.query.results.body);
-          for (let i in airqData) {
-            this.airq.push(airqData[i]);
-          }
-        });
-      }
-    }
-  });
-  airq.getData();
 
   //緊急電話
   var phone = new Vue({
@@ -162,7 +124,9 @@
   var weather = new Vue({
     el: '#weather',
     data: {
-      districts: [],
+      uv: {},
+      airquality: {},
+      districts: {},
       gps: {
         log: 0,
         lat: 0,
@@ -176,19 +140,21 @@
             let tr = data.query.results.tr[i];
             if (typeof tr.id === "undefined") continue;
             console.log(tr);
-            this.districts.push({
+            this.districts[tr.td[0].a.content] = {
               id: tr.id.replace('List', ''),
               name: tr.td[0].a.content,
               temperature: tr.td[1].a.content,
               rain: tr.td[2].a.content,
-              icon: tr.td[3].div.a.img.src
-            });
+              icon: "/images/weather/" + tr.td[3].div.a.img.src.match(/\d+/g)[0] + ".gif",
+              describe: tr.td[3].div.a.img.alt
+            };
           }
         });
       },
       getCountyName: function (log, lat) {
         $.getJSON(`https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.nlsc.gov.tw%2Fother%2FTownVillagePointQuery%2F${log.toFixed(4)}%2F${lat.toFixed(2)}'&format=json&callback=`, (data) => {
           this.gps.countyName = data.query.results.townVillageItem.ctyName;
+
         });
       },
       locateUserLocation: function () {
@@ -197,10 +163,29 @@
           this.gps.lat = position.coords.latitude;
           this.getCountyName(position.coords.longitude, position.coords.latitude);
         }, () => {});
+      },
+      getUv: function () {
+        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D'http%3A%2F%2Fopendata.epa.gov.tw%2Fws%2FData%2FUV%2F%3Fformat%3Djson'&format=json&callback=", (data) => {
+          let uvData = JSON.parse(data.query.results.body);
+          for (let i in uvData) {
+            this.uv[uvData[i].County] = uvData[i];
+          }
+        });
+      },
+      getAirQuality: function () {
+        $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D'http%3A%2F%2Fopendata2.epa.gov.tw%2FAQX.json'&format=json&callback=", (data) => {
+          let airquality= JSON.parse(data.query.results.body);
+          console.log(airquality);
+          for (let i in airquality) {
+            this.airquality[airquality[i].County] = airquality[i];
+          }
+        });
       }
     }
   });
   weather.getData();
   weather.locateUserLocation();
+  weather.getUv();
+  weather.getAirQuality();
 //})();
 
