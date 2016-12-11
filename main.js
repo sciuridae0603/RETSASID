@@ -223,7 +223,7 @@
               name: tr.td[0].a.content,
               temperature: tr.td[1].a.content,
               rain: tr.td[2].a.content,
-              icon: "/images/weather/" + tr.td[3].div.a.img.src.match(/\d+/g)[0] + ".gif",
+              icon: "./images/weather/" + tr.td[3].div.a.img.src.match(/\d+/g)[0] + ".gif",
               describe: tr.td[3].div.a.img.alt
             };
           }
