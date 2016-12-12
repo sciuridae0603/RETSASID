@@ -26,15 +26,14 @@
       }
     },
     methods: {
+      updateUser: function (user) {
+        this.user = user.displayName;
+        this.email = user.email;
+        this.photoUrl = user.photoURL;
+        this.uid = user.uid;
+      },
       login: function () {
-        firebase.auth().signInWithPopup(provider).then((result) => {
-          this.token = result.credential.accessToken;
-          let user = result.user;
-          this.user = user.displayName;
-          this.email = user.email;
-          this.photoUrl = user.photoURL;
-          this.uid = user.uid;
-        }).catch(function(error) {
+        firebase.auth().signInWithPopup(provider).catch(function(error) {
           console.log(error);
           //@TODO: fix me
         });
@@ -55,6 +54,14 @@
         this.modal.body = '';
       }
     }
+  });
+  firebase.auth().onAuthStateChanged((currentUser) => {
+    if (!currentUser) {
+      user.uid = 0;
+      return;
+    }
+
+    user.updateUser(currentUser);
   });
 
   var report = new Vue({
