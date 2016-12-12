@@ -48,6 +48,11 @@
           title: this.modal.title,
           body: this.modal.body
         });
+
+        //Close modal & clear data
+        $('#input-modal').modal('hide');
+        this.modal.title = '';
+        this.modal.body = '';
       }
     }
   });
