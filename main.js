@@ -83,17 +83,14 @@
       }
     },
     methods: {
-      initPosts: function () {
-        var postsRecentRef = firebase.database().ref('/posts').limitToLast(20);
-        postsRecentRef.on('child_added', (data) => {
-          this.posts[data.key] = data.val();
-        });
-        postsRecentRef.on('child_changed', (data) => {
-          this.posts[data.key] = data.val();
-        });
-        postsRecentRef.on('child_removed', (data) => {
-          delete this.posts[data.key];
-        });
+      addPost: function (data) {
+        this.$set(this.posts, data.key, data.val());
+      },
+      updatePost: function (data) {
+        this.$set(this.posts, data.key, data.val());
+      },
+      removePost: function (data) {
+        this.$delete(this.posts, data.key);
       },
       loadPosts: function () {
         firebase.database().ref('/posts').orderByKey().once('value').then((snapshot) => {
@@ -107,7 +104,12 @@
       }
     }
   });
-  report.initPosts();
+  (function (report) {
+    var postsRecentRef = firebase.database().ref('/posts').limitToLast(20);
+    postsRecentRef.on('child_added', report.addPost);
+    postsRecentRef.on('child_changed', report.updatePost);
+    postsRecentRef.on('child_removed', report.removePost);
+  })(report);
   report.loadPosts();
 
   //------ 各站公告
