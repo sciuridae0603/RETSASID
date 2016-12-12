@@ -222,7 +222,6 @@
           for (let i in data.query.results.tr) {
             let tr = data.query.results.tr[i];
             if (typeof tr.id === "undefined") continue;
-            console.log(tr);
             this.districts[tr.td[0].a.content] = {
               id: tr.id.replace('List', ''),
               name: tr.td[0].a.content,
@@ -258,7 +257,6 @@
       getAirQuality: function () {
         $.getJSON("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D'http%3A%2F%2Fopendata2.epa.gov.tw%2FAQX.json'&format=json&callback=", (data) => {
           let airquality= JSON.parse(data.query.results.body);
-          console.log(airquality);
           for (let i in airquality) {
             this.airquality[airquality[i].County] = airquality[i];
           }
