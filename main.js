@@ -41,17 +41,26 @@
       showReportModal: function (title, body) {
         $('#input-modal').modal('show');
       },
-      report: function (title, body) {
-        let newPost = firebase.database().ref(`/user-posts/${this.uid}`).push();
-        newPost.set({
-          title: this.modal.title,
-          body: this.modal.body
-        });
+      report: function () {
+        let newPost = firebase.database().ref(`/posts`).push();
 
-        //Close modal & clear data
-        $('#input-modal').modal('hide');
-        this.modal.title = '';
-        this.modal.body = '';
+        let postData = {
+          title: this.modal.title,
+          body: this.modal.body,
+          user: this.user,
+          uid: this.uid,
+          timestamp: Date.now()
+        };
+
+        let updates = {};
+        updates[`/user-posts/${this.uid}/${newPost.key}`] = postData;
+        updates[`/posts/${newPost.key}`] = postData;
+        firebase.database().ref().update(updates).then(() => {
+          //Close modal & clear data
+          $('#input-modal').modal('hide');
+          this.modal.title = '';
+          this.modal.body = '';
+        });
       }
     }
   });

@@ -164,10 +164,16 @@
             <div class="col-md-12">
                 <h2>網友回報</h2>
                 <table class="table table-bordered">
+                    <thead><tr>
+                        <td>標題</td>
+                        <td>時間</td>
+                        <td>使用者</td>
+                    </tr></thead>
                     <tbody>
                         <tr v-for="(post, key) in posts">
                             <td><a href="#" v-on:click="show(key)">{{ post.title }}</a></td>
-                            <td>{{ post.author }}</td>
+                            <td>{{ (new Date(post.timestamp)).toLocaleString() }}</td>
+                            <td>{{ post.user }}</td>
                         </tr>
                     </tbody>
                 </table>
